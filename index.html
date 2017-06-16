@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="it" ng-app="index" ng-controller="IndexController" >
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap css-->
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--Custom css-->
+    <link href="index.css" rel="stylesheet" type="text/css">
+
+    <title>{{title}}</title>
+</head>
+<body>
+<div class="container-fluid">
+    <h1 ng-show="data.settings.numseggio>0">Seggio {{data.settings.numseggio}}</h1>
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"><a href="#graph_tab" aria-controls="graph_tab" role="tab" data-toggle="tab" ng-click="drawGraph()">Grafico</a></li>
+            <li role="presentation"><a href="#data_tab" aria-controls="data_tab" role="tab" data-toggle="tab">Dati</a></li>
+            <li role="presentation" class="active"><a href="#settings_tab" aria-controls="settings_tab" role="tab" data-toggle="tab">Impostazioni</a></li>
+       </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane" id="graph_tab">
+                <div>
+
+                    Donne:<span id="pdonne" class="bold">{{(data.dati) ? data.dati.slice(-1)[0].donne : ""}}</span>
+                    Uomini:<span id="puomini" class="bold">{{ data.dati.length > 0 ? data.dati.slice(-1)[0].uomini : ""}}</span>
+                    Totale:<span id="ptotale" class="bold">{{ data.dati.length > 0 ? data.dati.slice(-1)[0].totale : ""}}</span>
+                    <br>
+                    % votanti:<span id="perc" class="bold"> {{ data.dati.length > 0 ? data.dati.slice(-1)[0].perctotale : ""}}</span>%
+                </div>
+                <br>
+                <div>
+                    <canvas id="chart" height="100%"></canvas>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="data_tab">
+                <button class="btn btn-success" ng-click="addOra()"><span class="glyphicon glyphicon-plus"></span> Aggiungi Dato</button>
+                <button class="btn btn-danger" ng-click="removeLastOra()"><span class="glyphicon glyphicon-minus"></span> Rimuovi Ultimo Dato</button>
+                <br>
+                <table class="table">
+                    <tr>
+                        <th>ORE</th>
+                        <th>DONNE</th>
+                        <th>UOMINI</th>
+                        <th>TOTALE</th>
+                        <th>% DONNE</th>
+                        <th>% UOMINI</th>
+                        <th>% TOTALE</th>
+                    </tr>
+                    <tr ng-repeat="x in data.dati | orderBy: '-ora'">
+                        <td> ORE {{x.ora}}</td>
+                        <td><div class="form-group"><input class="form-control" type="number" ng-model="x.donne"></div></td>
+                        <td><div class="form-group"><input class="form-control" type="number" ng-model="x.uomini"></div></td>
+                        <td>{{ x.totale = x.donne + x.uomini }}</td>
+                        <td>{{ x.percdonne = data.settings.maxdonne !=0 ? ((x.donne/data.settings.maxdonne)*100).toFixed(2).toString() : 0  }}</td>
+                        <td>{{ x.percuomini = data.settings.maxuomini !=0 ? ((x.uomini/data.settings.maxuomini)*100).toFixed(2).toString() : 0  }}</td>
+                        <td>{{ x.perctotale = data.settings.maxtotale !=0 ? ((x.totale/data.settings.maxtotale)*100).toFixed(2).toString() : 0 }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane active" id="settings_tab">
+                <div style="max-width:300px;">
+                    <div class="form-group">
+                        <label for="numseggio">Numero Seggio:</label>
+                        <input type="number" class="form-control" id="numseggio" ng-model="data.settings.numseggio">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxdonne">Totale Elettrici (F):</label>
+                        <input type="number" class="form-control" id="maxdonne" ng-model="data.settings.maxdonne">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxuomini">Totale Elettori (M):</label>
+                        <input type="number" class="form-control" id="maxuomini" ng-model="data.settings.maxuomini">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxtotale">Totale Elettori Seggio:</label>
+                        <span id="maxtotale">{{data.settings.maxtotale = data.settings.maxuomini + data.settings.maxdonne}}</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-danger" ng-click="resetData(true);"><span class="glyphicon glyphicon-trash"></span> Cancella tutti i dati</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">&copy; <a href="https://francescobuonocore.it">Francesco Buonocore</a> 2017 - <a href="https://github.com/bonoweb/electionDay">GitHub Project</a></p>
+    </div>
+</footer>
+
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="index.js"></script>
+<script src="node_modules/chart.js/dist/Chart.js"></script>
+</body>
+</html>

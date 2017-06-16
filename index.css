@@ -1,0 +1,50 @@
+html{
+    position: relative;
+    min-height: 100%;
+}
+
+body{
+    font-family: Arial,sans-serif;
+    margin-bottom:60px;
+    overflow-x: hidden;
+    background-color: #e5e5e5;
+}
+
+.container-fluid{
+    padding:10px;
+}
+
+.bold{
+    font-weight:bold;
+}
+
+.form-group{
+    max-width:200px;
+}
+
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: #fff;
+    padding: 10px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #d5d5d5;
+}
+
+.text-muted {
+    margin: 20px 0;
+}

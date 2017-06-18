@@ -17,21 +17,23 @@
     <div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation"><a href="#graph_tab" aria-controls="graph_tab" role="tab" data-toggle="tab" ng-click="drawGraph()">Grafico</a></li>
-            <li role="presentation"><a href="#data_tab" aria-controls="data_tab" role="tab" data-toggle="tab">Dati</a></li>
-            <li role="presentation" class="active"><a href="#settings_tab" aria-controls="settings_tab" role="tab" data-toggle="tab">Impostazioni</a></li>
+            <li role="presentation"><a href="#graph_tab" aria-controls="graph_tab" role="tab" data-toggle="tab" ng-click="drawGraph()"><span class="glyphicon glyphicon-signal"></span> Grafico</a></li>
+            <li role="presentation"><a href="#data_tab" aria-controls="data_tab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Dati</a></li>
+            <li role="presentation" class="active"><a href="#settings_tab" aria-controls="settings_tab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span> Impostazioni</a></li>
        </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane" id="graph_tab">
-                <div>
+                <div ng-show="data && data.dati && data.dati.length > 0">
+                    <h4>STATISTICHE ORE {{data.dati.slice(-1)[0].ora}}</h4>
 
-                    Donne:<span id="pdonne" class="bold">{{(data.dati) ? data.dati.slice(-1)[0].donne : ""}}</span>
-                    Uomini:<span id="puomini" class="bold">{{ data.dati.length > 0 ? data.dati.slice(-1)[0].uomini : ""}}</span>
-                    Totale:<span id="ptotale" class="bold">{{ data.dati.length > 0 ? data.dati.slice(-1)[0].totale : ""}}</span>
+                    Donne:<span id="pdonne" class="bold"> {{ data.dati.slice(-1)[0].donne }} / {{ data.settings.maxdonne }} ({{data.dati.slice(-1)[0].percdonne }}%)</span>
                     <br>
-                    % votanti:<span id="perc" class="bold"> {{ data.dati.length > 0 ? data.dati.slice(-1)[0].perctotale : ""}}</span>%
+                    Uomini:<span id="puomini" class="bold">{{ data.dati.slice(-1)[0].uomini }} / {{ data.settings.maxuomini }} ({{data.dati.slice(-1)[0].percuomini }}%)</span>
+                    <br>
+                    <br>
+                    Totale:<span id="ptotale" class="bold">{{ data.dati.slice(-1)[0].totale }} / {{ data.settings.maxtotale }} ({{data.dati.slice(-1)[0].perctotale}}%)</span>
                 </div>
                 <br>
                 <div>

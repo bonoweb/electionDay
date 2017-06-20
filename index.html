@@ -17,7 +17,7 @@
     <div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation"><a href="#graph_tab" aria-controls="graph_tab" role="tab" data-toggle="tab" ng-click="drawGraph()"><span class="glyphicon glyphicon-signal"></span> Grafico</a></li>
+            <li role="presentation"><a href="#graph_tab" aria-controls="graph_tab" role="tab" data-toggle="tab" ng-click="reloadGraphs()"><span class="glyphicon glyphicon-signal"></span> Grafico</a></li>
             <li role="presentation"><a href="#data_tab" aria-controls="data_tab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Dati</a></li>
             <li role="presentation" class="active"><a href="#settings_tab" aria-controls="settings_tab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span> Impostazioni</a></li>
        </ul>
@@ -25,15 +25,33 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane" id="graph_tab">
-                <div ng-show="data && data.dati && data.dati.length > 0">
-                    <h4>STATISTICHE ORE {{data.dati.slice(-1)[0].ora}}</h4>
+                <div ng-show="data && data.dati && data.dati.length > 0" class="row">
+                    <div class="col-md-4">
+                        <h4>AFFLUENZA ORE {{data.dati.slice(-1)[0].ora}}</h4>
 
-                    Donne:<span id="pdonne" class="bold"> {{ data.dati.slice(-1)[0].donne }} / {{ data.settings.maxdonne }} ({{data.dati.slice(-1)[0].percdonne }}%)</span>
-                    <br>
-                    Uomini:<span id="puomini" class="bold">{{ data.dati.slice(-1)[0].uomini }} / {{ data.settings.maxuomini }} ({{data.dati.slice(-1)[0].percuomini }}%)</span>
-                    <br>
-                    <br>
-                    Totale:<span id="ptotale" class="bold">{{ data.dati.slice(-1)[0].totale }} / {{ data.settings.maxtotale }} ({{data.dati.slice(-1)[0].perctotale}}%)</span>
+                        Donne:<span id="pdonne" class="bold"> {{ data.dati.slice(-1)[0].donne }} / {{ data.settings.maxdonne }} ({{data.dati.slice(-1)[0].percdonne }}%)</span>
+                        <br>
+                        Uomini:<span id="puomini" class="bold">{{ data.dati.slice(-1)[0].uomini }} / {{ data.settings.maxuomini }} ({{data.dati.slice(-1)[0].percuomini }}%)</span>
+                        <br>
+                        <br>
+                        Totale:<span id="ptotale" class="bold">{{ data.dati.slice(-1)[0].totale }} / {{ data.settings.maxtotale }} ({{data.dati.slice(-1)[0].perctotale}}%)</span>
+                        <br>
+                        <br>
+                        <button class="btn btn-default" ng-click="toggle()">Commuta Torta / Ciambella</button>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="d_distribuzione" height="100%" class="chart chart-pie"
+                                chart-data="data_distribuzione" chart-labels="labels_distribuzione"
+                                chart-colors="colors_distribuzione" chart-type="type_distribuzione"
+                                chart-options="options_distribuzione">
+                        </canvas>
+                    </div><div class="col-md-4" id="pie_affluenza_div">
+                    <canvas id="d_affluenza" height="100%" class="chart chart-pie"
+                            chart-data="data_affluenza" chart-labels="labels_affluenza"
+                            chart-colors="colors_affluenza" chart-type="type_affluenza"
+                            chart-options="options_affluenza">
+                    </canvas>
+                    </div>
                 </div>
                 <br>
                 <div>
@@ -42,9 +60,10 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="data_tab">
+                <br>
                 <button class="btn btn-success" ng-click="addOra()"><span class="glyphicon glyphicon-plus"></span> Aggiungi Dato</button>
                 <button class="btn btn-danger" ng-click="removeLastOra()"><span class="glyphicon glyphicon-minus"></span> Rimuovi Ultimo Dato</button>
-                <br>
+                <br><br>
                 <table class="table">
                     <tr>
                         <th>ORE</th>
@@ -55,7 +74,7 @@
                         <th>% UOMINI</th>
                         <th>% TOTALE</th>
                     </tr>
-                    <tr ng-repeat="x in data.dati | orderBy: '-ora'">
+                    <tr ng-repeat="x in data.dati | orderBy: '-ora' track by $index">
                         <td> ORE {{x.ora}}</td>
                         <td><div class="form-group"><input class="form-control" type="number" ng-model="x.donne"></div></td>
                         <td><div class="form-group"><input class="form-control" type="number" ng-model="x.uomini"></div></td>
@@ -105,5 +124,6 @@
 <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="index.js"></script>
 <script src="node_modules/chart.js/dist/Chart.js"></script>
+<script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
 </body>
 </html>

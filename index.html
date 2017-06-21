@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it" ng-app="index" ng-controller="IndexController" >
+<html lang="it" ng-app="index" ng-controller="IndexController" ng-init="indextab = 2" >
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,53 +13,54 @@
 </head>
 <body>
 <div class="container-fluid">
-    <h1 ng-show="data.settings.numseggio>0">Seggio {{data.settings.numseggio}}</h1>
+    <h2 ng-show="data.settings.numseggio>0">Seggio {{data.settings.numseggio}}</h2>
     <div>
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation"><a href="#graph_tab" aria-controls="graph_tab" role="tab" data-toggle="tab" ng-click="reloadGraphs()"><span class="glyphicon glyphicon-signal"></span> Grafico</a></li>
-            <li role="presentation"><a href="#data_tab" aria-controls="data_tab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> Dati</a></li>
-            <li role="presentation" class="active"><a href="#settings_tab" aria-controls="settings_tab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-wrench"></span> Impostazioni</a></li>
-       </ul>
+        <uib-tabset active="indextab">
+            <uib-tab index="0" ng-click='reloadGraphs()'>
+                <uib-tab-heading>
+                    <span class='glyphicon glyphicon-signal'></span> Grafico
+                </uib-tab-heading>
 
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane" id="graph_tab">
                 <div ng-show="data && data.dati && data.dati.length > 0" class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-4">
                         <h4>AFFLUENZA ORE {{data.dati.slice(-1)[0].ora}}</h4>
 
-                        Donne:<span id="pdonne" class="bold"> {{ data.dati.slice(-1)[0].donne }} / {{ data.settings.maxdonne }} ({{data.dati.slice(-1)[0].percdonne }}%)</span>
+                        Femmine: <span id="pdonne" class="bold"> {{ data.dati.slice(-1)[0].donne }} / {{ data.settings.maxdonne }} ({{data.dati.slice(-1)[0].percdonne }}%)</span>
                         <br>
-                        Uomini:<span id="puomini" class="bold">{{ data.dati.slice(-1)[0].uomini }} / {{ data.settings.maxuomini }} ({{data.dati.slice(-1)[0].percuomini }}%)</span>
-                        <br>
-                        <br>
-                        Totale:<span id="ptotale" class="bold">{{ data.dati.slice(-1)[0].totale }} / {{ data.settings.maxtotale }} ({{data.dati.slice(-1)[0].perctotale}}%)</span>
+                        Maschi: <span id="puomini" class="bold">{{ data.dati.slice(-1)[0].uomini }} / {{ data.settings.maxuomini }} ({{data.dati.slice(-1)[0].percuomini }}%)</span>
                         <br>
                         <br>
-                        <button class="btn btn-default" ng-click="toggle()">Commuta Torta / Ciambella</button>
+                        Totale: <span id="ptotale" class="bold">{{ data.dati.slice(-1)[0].totale }} / {{ data.settings.maxtotale }} ({{data.dati.slice(-1)[0].perctotale}}%)</span>
+
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-sm-4">
                         <canvas id="d_distribuzione" height="100%" class="chart chart-pie"
                                 chart-data="data_distribuzione" chart-labels="labels_distribuzione"
                                 chart-colors="colors_distribuzione" chart-type="type_distribuzione"
                                 chart-options="options_distribuzione">
                         </canvas>
-                    </div><div class="col-md-4" id="pie_affluenza_div">
-                    <canvas id="d_affluenza" height="100%" class="chart chart-pie"
-                            chart-data="data_affluenza" chart-labels="labels_affluenza"
-                            chart-colors="colors_affluenza" chart-type="type_affluenza"
-                            chart-options="options_affluenza">
-                    </canvas>
+                    </div>
+                    <div class="col-md-4 col-sm-4" id="pie_affluenza_div">
+                        <canvas id="d_affluenza" height="100%" class="chart chart-pie"
+                                chart-data="data_affluenza" chart-labels="labels_affluenza"
+                                chart-colors="colors_affluenza" chart-type="type_affluenza"
+                                chart-options="options_affluenza">
+                        </canvas>
                     </div>
                 </div>
                 <br>
                 <div>
-                    <canvas id="chart" height="100%"></canvas>
+                    <canvas id="line" height="100%" class="chart chart-line" chart-data="gdata"
+                            chart-labels="glabels" chart-series="gseries" chart-options="goptions"
+                            chart-colors="gcolors" chart-type="type_line">
+                    </canvas>
                 </div>
-            </div>
+            </uib-tab>
 
-            <div role="tabpanel" class="tab-pane" id="data_tab">
+            <uib-tab index="1">
+                <uib-tab-heading>
+                    <span class="glyphicon glyphicon-th-list"></span> Dati
+                </uib-tab-heading>
                 <br>
                 <button class="btn btn-success" ng-click="addOra()"><span class="glyphicon glyphicon-plus"></span> Aggiungi Dato</button>
                 <button class="btn btn-danger" ng-click="removeLastOra()"><span class="glyphicon glyphicon-minus"></span> Rimuovi Ultimo Dato</button>
@@ -67,11 +68,11 @@
                 <table class="table">
                     <tr>
                         <th>ORE</th>
-                        <th>DONNE</th>
-                        <th>UOMINI</th>
+                        <th>FEMMINE</th>
+                        <th>MASCHI</th>
                         <th>TOTALE</th>
-                        <th>% DONNE</th>
-                        <th>% UOMINI</th>
+                        <th>% FEMMINE</th>
+                        <th>% MASCHI</th>
                         <th>% TOTALE</th>
                     </tr>
                     <tr ng-repeat="x in data.dati | orderBy: '-ora' track by $index">
@@ -84,9 +85,11 @@
                         <td>{{ x.perctotale = data.settings.maxtotale !=0 ? ((x.totale/data.settings.maxtotale)*100).toFixed(2).toString() : 0 }}</td>
                     </tr>
                 </table>
-            </div>
-
-            <div role="tabpanel" class="tab-pane active" id="settings_tab">
+            </uib-tab>
+            <uib-tab index="2" active="true">
+                <uib-tab-heading>
+                    <span class="glyphicon glyphicon-wrench"></span> Impostazioni
+                </uib-tab-heading>
                 <div style="max-width:300px;">
                     <div class="form-group">
                         <label for="numseggio">Numero Seggio:</label>
@@ -109,8 +112,12 @@
                     </div>
 
                 </div>
-            </div>
-        </div>
+            </uib-tab>
+            <li ng-show="indextab == 0" class="tab pull-right" active="false">
+                <button class="btn btn-default btn-sm small" ng-click="toggle()">Commuta Tipo Grafico</button>
+            </li>
+
+        </uib-tabset>
     </div>
 </div>
 <footer class="footer">
@@ -120,8 +127,7 @@
 </footer>
 
 <script src="node_modules/angular/angular.min.js"></script>
-<script src="node_modules/jquery/dist/jquery.min.js"></script>
-<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
 <script src="index.js"></script>
 <script src="node_modules/chart.js/dist/Chart.js"></script>
 <script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>

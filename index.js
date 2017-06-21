@@ -1,4 +1,4 @@
-angular.module('index', ['chart.js'])
+angular.module('index', ['ui.bootstrap','chart.js'])
     .controller('IndexController', function ($scope) {
         var basetitle = 'electionDay';
         $scope.title = basetitle;
@@ -27,20 +27,6 @@ angular.module('index', ['chart.js'])
             $scope.data.dati = [];
         };
 
-        chart_element = document.getElementById('chart');
-        myChart = null;
-
-        $scope.graph_options = {
-            maintainAspectRatio: true,
-            type: 'line',
-            data: { labels: [], datasets: [] },
-            options: {
-                spanGaps: true,
-                scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
-            }
-        };
-
-
         $scope.addOra = function(){
             if($scope.data.dati.length === 0){
                 this_ora = oraInizio;
@@ -58,90 +44,93 @@ angular.module('index', ['chart.js'])
             }
         };
 
-        $scope.drawGraph = function () {
-            $scope.graph_options.data.labels = labels;
-            graph_uomini = {
-                label: 'UOMINI',
-                data: [],
-                backgroundColor: 'rgba(33, 23, 192, 0.2)',
-                borderColor: 'rgba(44, 23, 192, 1)',
-
-                borderWidth: 1
-            };
-            graph_donne = {
-                label: 'DONNE',
-                data: [],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255,99,132,1)',
-                borderWidth: 1
-            };
-            graph_tot = {
-                label: 'TOTALE',
-                data: [],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-
-            };
-            angular.forEach($scope.data.dati, function (ora) {
-                //se il valore è zero, viene settato a null, così non viene disegnato
-                graph_uomini.data.push((ora.uomini === 0 && ora.ora!==oraInizio) ? null : ora.uomini);
-                graph_donne.data.push((ora.donne === 0 && ora.ora!==oraInizio) ? null : ora.donne);
-                graph_tot.data.push((ora.totale === 0 && ora.ora!==oraInizio) ? null : ora.totale);
-            });
-            $scope.graph_options.data.datasets = [];
-            $scope.graph_options.data.datasets.push(graph_uomini, graph_donne, graph_tot);
-
-            if(myChart === null) {
-                myChart = new Chart(chart_element, $scope.graph_options);
-            }
-            else {
-                myChart.update();
-            }
-        };
-
-        $scope.drawPieDistribuzione = function(){
+        $scope.drawPieDistribuzione = function() {
             pie_uomini = $scope.data.dati.slice(-1)[0].uomini;
             pie_donne = $scope.data.dati.slice(-1)[0].donne;
+            pie_tot = pie_donne + pie_uomini;
 
-            $scope.labels_distribuzione = ["Donne", "Uomini"];
+            $scope.labels_distribuzione = ["Femmine", "Maschi"];
             $scope.data_distribuzione = null;
             $scope.data_distribuzione = [pie_donne, pie_uomini];
-            $scope.colors_distribuzione = ['#ff6384','#2117c0'];
-            $scope.options_distribuzione = { legend: { display: true } };
+            $scope.colors_distribuzione = ['#ff6384', '#2117c0'];
+            $scope.options_distribuzione = {
+                legend: {display: true}, tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var value = data.datasets[0].data[tooltipItem.index];
+                            var label = data.labels[tooltipItem.index];
+                            var perc = Math.round(value / pie_tot * 100);
+                            return label + ': ' + perc + '%';
+                        }
+                    }
+                }
+            };
             $scope.type_distribuzione = 'pie';
-
-
         };
+
         $scope.drawPieAffluenza = function(){
+            pie_tot_votanti =  $scope.data.settings.maxtotale;
+
             pie_votanti = $scope.data.dati.slice(-1)[0].totale;
-            pie_non_votanti = $scope.data.settings.maxtotale - $scope.data.dati.slice(-1)[0].totale;
+            pie_non_votanti = pie_tot_votanti - $scope.data.dati.slice(-1)[0].totale;
 
             $scope.labels_affluenza = ["Votanti", "Non Votanti"];
             $scope.data_affluenza = null;
             $scope.data_affluenza = [pie_votanti, pie_non_votanti];
             $scope.colors_affluenza = ['#00ee00','#cccccc'];
-            $scope.options_affluenza ={ legend: { display: true }};
+            $scope.options_affluenza ={ legend: { display: true }, tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var value = data.datasets[0].data[tooltipItem.index];
+                        var label = data.labels[tooltipItem.index];
+                        var perc = Math.round(value / pie_tot_votanti * 100);
+                        return label + ': ' + perc + '%';
+                    }
+                }
+            }};
             $scope.type_affluenza = 'pie';
-            console.log(document.getElementById('pie_affluenza'));
+        };
 
+        $scope.drawGraph = function () {
+            $scope.glabels = [];
+            for (var i = oraInizio; i <= oraFine; i++) {
+                $scope.glabels.push('ore ' + i);
+            }
+            $scope.gseries = ['Maschi', 'Femmine', 'Totale'];
+            $scope.gdata = [[],[],[]];
+            $scope.data.dati.forEach(function(x){
+                $scope.gdata[0].push(x.uomini);
+                $scope.gdata[1].push(x.donne);
+                $scope.gdata[2].push(x.totale);
+            });
+            $scope.gcolors = ['#2117c0','#ff6384','#4bc0c0'];
+            $scope.goptions = {
+                scales: {
+                    yAxes: [
+                        {
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            display: true,
+                            position: 'left'
+                        }
+                    ]
+                }
+            };
         };
 
         $scope.reloadGraphs = function(){
             $scope.drawGraph();
             $scope.drawPieDistribuzione();
             $scope.drawPieAffluenza();
-            $scope.toggle();
-
         };
         $scope.toggle = function () {
             $scope.type_distribuzione = $scope.type_distribuzione === 'doughnut' ? 'pie' : 'doughnut';
             $scope.type_affluenza = $scope.type_affluenza === 'doughnut' ? 'pie' : 'doughnut';
+            $scope.type_line = $scope.type_line === 'bar' ? 'line' : 'bar';
         };
 
         //getting data from localstorage, or initializing data if not set.
         var data_ls = localStorage.getItem('data');
-        //console.log(ore_ls);
         if (data_ls === null) {
             console.log('data is null! initializing data');
             $scope.resetData();
@@ -159,6 +148,5 @@ angular.module('index', ['chart.js'])
                 console.log($scope.data);
             }
         }, true);
-
 
 });

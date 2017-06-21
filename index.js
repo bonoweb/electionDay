@@ -99,12 +99,13 @@ angular.module('index', ['ui.bootstrap','chart.js'])
             $scope.gseries = ['Maschi', 'Femmine', 'Totale'];
             $scope.gdata = [[],[],[]];
             $scope.data.dati.forEach(function(x){
-                $scope.gdata[0].push(x.uomini);
-                $scope.gdata[1].push(x.donne);
-                $scope.gdata[2].push(x.totale);
+                $scope.gdata[0].push((x.uomini === 0 && x.ora!==oraInizio) ? null : x.uomini);
+                $scope.gdata[1].push((x.donne === 0 && x.ora!==oraInizio) ? null : x.donne);
+                $scope.gdata[2].push((x.totale === 0 && x.ora!==oraInizio) ? null : x.totale);
             });
             $scope.gcolors = ['#2117c0','#ff6384','#4bc0c0'];
             $scope.goptions = {
+                spanGaps: true,
                 scales: {
                     yAxes: [
                         {

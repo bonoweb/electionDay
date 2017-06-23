@@ -18,7 +18,7 @@
         <uib-tabset active="indextab">
             <uib-tab index="0" ng-click='reloadGraphs()'>
                 <uib-tab-heading>
-                    <span class='glyphicon glyphicon-signal'></span> Grafico
+                    <span class='glyphicon glyphicon-signal'></span> Grafici
                 </uib-tab-heading>
 
                 <div ng-show="data && data.dati && data.dati.length > 0" class="row">
@@ -34,14 +34,14 @@
 
                     </div>
                     <div class="col-md-4 col-sm-4">
-                        <canvas id="d_distribuzione" height="100%" class="chart chart-pie"
+                        <canvas id="d_distribuzione" height="100%" class="chart chart-doughnut"
                                 chart-data="data_distribuzione" chart-labels="labels_distribuzione"
                                 chart-colors="colors_distribuzione" chart-type="type_distribuzione"
                                 chart-options="options_distribuzione">
                         </canvas>
                     </div>
                     <div class="col-md-4 col-sm-4" id="pie_affluenza_div">
-                        <canvas id="d_affluenza" height="100%" class="chart chart-pie"
+                        <canvas id="d_affluenza" height="100%" class="chart chart-doughnut"
                                 chart-data="data_affluenza" chart-labels="labels_affluenza"
                                 chart-colors="colors_affluenza" chart-type="type_affluenza"
                                 chart-options="options_affluenza">
@@ -52,7 +52,7 @@
                 <div>
                     <canvas id="line" height="100%" class="chart chart-line" chart-data="gdata"
                             chart-labels="glabels" chart-series="gseries" chart-options="goptions"
-                            chart-colors="gcolors" chart-type="type_line">
+                            chart-colors="gcolors" chart-type="type_line" chart-dataset-override="goverride">
                     </canvas>
                 </div>
             </uib-tab>
@@ -80,9 +80,9 @@
                         <td><div class="form-group"><input class="form-control" type="number" ng-model="x.donne"></div></td>
                         <td><div class="form-group"><input class="form-control" type="number" ng-model="x.uomini"></div></td>
                         <td>{{ x.totale = x.donne + x.uomini }}</td>
-                        <td>{{ x.percdonne = data.settings.maxdonne !=0 ? ((x.donne/data.settings.maxdonne)*100).toFixed(2).toString() : 0  }}</td>
-                        <td>{{ x.percuomini = data.settings.maxuomini !=0 ? ((x.uomini/data.settings.maxuomini)*100).toFixed(2).toString() : 0  }}</td>
-                        <td>{{ x.perctotale = data.settings.maxtotale !=0 ? ((x.totale/data.settings.maxtotale)*100).toFixed(2).toString() : 0 }}</td>
+                        <td>{{ x.percdonne = data.settings.maxdonne !=0 ? ((x.donne/data.settings.maxdonne)*100).toFixed(1).toString() : 0  }}</td>
+                        <td>{{ x.percuomini = data.settings.maxuomini !=0 ? ((x.uomini/data.settings.maxuomini)*100).toFixed(1).toString() : 0  }}</td>
+                        <td>{{ x.perctotale = data.settings.maxtotale !=0 ? ((x.totale/data.settings.maxtotale)*100).toFixed(1).toString() : 0 }}</td>
                     </tr>
                 </table>
             </uib-tab>
@@ -90,7 +90,8 @@
                 <uib-tab-heading>
                     <span class="glyphicon glyphicon-wrench"></span> Impostazioni
                 </uib-tab-heading>
-                <div style="max-width:300px;">
+                <div class="row">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="numseggio">Numero Seggio:</label>
                         <input type="number" class="form-control" id="numseggio" ng-model="data.settings.numseggio">
@@ -107,14 +108,48 @@
                         <label for="maxtotale">Totale Elettori Seggio:</label>
                         <span id="maxtotale">{{data.settings.maxtotale = data.settings.maxuomini + data.settings.maxdonne}}</span>
                     </div>
-                    <div>
-                        <button class="btn btn-danger" ng-click="resetData(true);"><span class="glyphicon glyphicon-trash"></span> Cancella tutti i dati</button>
-                    </div>
-
                 </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-5">
+                    <br>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Dati Salvati</h3>
+                        </div>
+                        <div class="panel-body">
+                            I dati attualmente vengono salvati solo localmente, permettendo di mantenerli chiudendo e riprendo successivamente il browser.
+                            <br>
+                            Nessun dato inserito viene attualmente inviato a server esterni.
+                            <br>
+                            È possibile utilizzare il pulsante qui sotto per resettare i dati alla situazione iniziale.
+                            <br>
+                            <br>
+
+                            <button class="btn btn-danger" ng-click="resetData(true);"><span class="glyphicon glyphicon-trash"></span> Cancella tutti i dati</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <br>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Codice Sorgente e Licenza</h3>
+                        </div>
+                        <div class="panel-body">
+                            Il codice sorgente è open source, disponibile su <a href="https://github.com/bonoweb/electionDay">GitHub</a>
+                            <br>
+                            Il codice è rilasciato sotto <a href="./LICENSE.txt">licenza MIT</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
             </uib-tab>
             <li ng-show="indextab == 0" class="tab pull-right" active="false">
-                <button class="btn btn-default btn-sm small" ng-click="toggle()">Commuta Tipo Grafico</button>
+                <button class="btn btn-default btn-sm small" ng-click="toggle()">Commuta Grafici</button>
             </li>
 
         </uib-tabset>

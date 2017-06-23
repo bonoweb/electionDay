@@ -65,7 +65,7 @@ angular.module('index', ['ui.bootstrap','chart.js'])
                     }
                 }
             };
-            $scope.type_distribuzione = 'pie';
+            $scope.type_distribuzione = 'doughnut';
         };
 
         $scope.drawPieAffluenza = function(){
@@ -88,7 +88,7 @@ angular.module('index', ['ui.bootstrap','chart.js'])
                     }
                 }
             }};
-            $scope.type_affluenza = 'pie';
+            $scope.type_affluenza = 'doughnut';
         };
 
         $scope.drawGraph = function () {
@@ -104,7 +104,13 @@ angular.module('index', ['ui.bootstrap','chart.js'])
                 $scope.gdata[2].push((x.totale === 0 && x.ora!==oraInizio) ? null : x.totale);
             });
             $scope.gcolors = ['#2117c0','#ff6384','#4bc0c0'];
+            $scope.goverride = [{ yAxisID: 'y-axis-1' }];
             $scope.goptions = {
+                animation: {
+                    animate:true,
+                    duration: 1000
+                },
+                pointBorderWidth: 10,
                 spanGaps: true,
                 scales: {
                     yAxes: [

@@ -3,7 +3,7 @@ _electionDay_ è un tool in html e js che permette di monitorare l'affluenza al 
 
 ### Come si usa
 
-   * [offline] scaricare questo zip in locale, decomprimerlo ed aprire **index.html** con un browser (consigliati Firefox o Chrome)
+   * [offline] scaricare [questo zip](https://electionday.francescobuonocore.it/electionday.zip) in locale, decomprimerlo ed aprire **index.html** con un browser (consigliati Firefox o Chrome)
 
    * [online] collegarsi a [https://electionday.francescobuonocore.it/](https://electionday.francescobuonocore.it/)
  

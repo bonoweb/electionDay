@@ -75,7 +75,7 @@
                         <th>% MASCHI</th>
                         <th>% TOTALE</th>
                     </tr>
-                    <tr ng-repeat="x in data.dati | orderBy: '-ora' track by $index">
+                    <tr ng-repeat="x in data.dati | orderBy: customOrder track by $index">
                         <td> ORE {{x.ora}}</td>
                         <td><div class="form-group"><input class="form-control" type="number" ng-model="x.donne"></div></td>
                         <td><div class="form-group"><input class="form-control" type="number" ng-model="x.uomini"></div></td>

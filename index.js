@@ -11,10 +11,20 @@ angular.module('index', ['ui.bootstrap','chart.js'])
 
         oraInizio = 7;
         oraFine = 23;
+
+        enabledLun = false;
+
+        oraInizioLun= 7;
+        oraFineLun = 15;
+
         labels = [];
         for(var j=oraInizio;j<=oraFine;j++)
         {
             labels.push('ore ' + j);
+        }
+        for(var j=oraInizioLun;j<=oraFineLun;j++)
+        {
+            labels.push('Lun. ore ' + j);
         }
         $scope.data = {};
         $scope.resetData = function(all){
@@ -34,8 +44,30 @@ angular.module('index', ['ui.bootstrap','chart.js'])
             else{
                 this_ora = $scope.data.dati.slice(-1)[0].ora + 1;
             }
-            if(this_ora <= oraFine)
+            if(this_ora <= oraFine && !this.enabledLun){
                 $scope.data.dati.push({'ora': this_ora, 'donne': 0, 'uomini': 0});
+            }
+            else{
+                if(!this.enabledLun)
+                {
+                    this.enabledLun = true;
+                    this_ora = oraInizioLun
+                }
+                if(this_ora <= oraFineLun){
+                    $scope.data.dati.push({'ora': this_ora, 'donne': 0, 'uomini': 0, 'lun': true});
+                }
+            }
+        };
+
+        $scope.customOrder = function(item) {
+            //console.info(item);
+            lun = 0;
+            if(item.lun){
+                lun=1000;
+            }
+            let order = - (item.ora) - lun ;
+            //console.info(order);
+            return order;
         };
 
         $scope.removeLastOra =  function(){
@@ -94,6 +126,9 @@ angular.module('index', ['ui.bootstrap','chart.js'])
         $scope.drawGraph = function () {
             $scope.glabels = [];
             for (var i = oraInizio; i <= oraFine; i++) {
+                $scope.glabels.push('ore ' + i);
+            }
+            for (var i = oraInizioLun; i <= oraFineLun; i++) {
                 $scope.glabels.push('ore ' + i);
             }
             $scope.gseries = ['Maschi', 'Femmine', 'Totale'];

@@ -191,4 +191,47 @@ angular.module('index', ['ui.bootstrap','chart.js'])
             }
         }, true);
 
-});
+        $scope.downloadData = function(){
+            $scope.scaricaCSV($scope.data.dati, "dati.csv");
+        }
+
+        $scope.scaricaCSV = function(array, nomeFile = 'dati.csv') {
+            if (!Array.isArray(array) || array.length === 0) {
+                console.error("L'array passato è vuoto o non è valido.");
+                return;
+            }
+
+            // Estrarre le intestazioni delle colonne
+            const intestazioni = Object.keys(array[0]);
+
+            // Creare il contenuto del CSV
+            const righe = array.map(obj =>
+                intestazioni.map(intestazione => JSON.stringify(obj[intestazione], replacer)).join(',')
+            );
+            const contenutoCSV = [intestazioni.join(','), ...righe].join('\n');
+
+            // Creare il file Blob
+            const blob = new Blob([contenutoCSV], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+
+            // Creare e simulare il click sul link per scaricare il file
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = nomeFile;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+
+            // Pulizia
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        function replacer(key, value) {
+            if (typeof value === 'string') {
+                return value.replace(/"/g, '""'); // Escapa le virgolette
+            }
+            return value;
+        }
+
+
+    });

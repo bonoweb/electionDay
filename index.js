@@ -81,7 +81,7 @@ angular.module('index', ['ui.bootstrap','chart.js'])
             pie_donne = $scope.data.dati.slice(-1)[0].donne;
             pie_tot = pie_donne + pie_uomini;
 
-            $scope.labels_distribuzione = ["Femmine", "Maschi"];
+            $scope.labels_distribuzione = ["A_L", "M_Z"];
             $scope.data_distribuzione = null;
             $scope.data_distribuzione = [pie_donne, pie_uomini];
             $scope.colors_distribuzione = ['#ff6384', '#2117c0'];

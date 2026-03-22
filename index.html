@@ -25,9 +25,9 @@
                     <div class="col-md-4 col-sm-4">
                         <h4>AFFLUENZA ORE {{data.dati.slice(-1)[0].ora}}</h4>
 
-                        Femmine: <span id="pdonne" class="bold"> {{ data.dati.slice(-1)[0].donne }} / {{ data.settings.maxdonne }} ({{data.dati.slice(-1)[0].percdonne }}%)</span>
+                        A_L: <span id="pdonne" class="bold"> {{ data.dati.slice(-1)[0].donne }} / {{ data.settings.maxdonne }} ({{data.dati.slice(-1)[0].percdonne }}%)</span>
                         <br>
-                        Maschi: <span id="puomini" class="bold">{{ data.dati.slice(-1)[0].uomini }} / {{ data.settings.maxuomini }} ({{data.dati.slice(-1)[0].percuomini }}%)</span>
+                        M_Z: <span id="puomini" class="bold">{{ data.dati.slice(-1)[0].uomini }} / {{ data.settings.maxuomini }} ({{data.dati.slice(-1)[0].percuomini }}%)</span>
                         <br>
                         <br>
                         Totale: <span id="ptotale" class="bold">{{ data.dati.slice(-1)[0].totale }} / {{ data.settings.maxtotale }} ({{data.dati.slice(-1)[0].perctotale}}%)</span>
@@ -68,11 +68,11 @@
                 <table class="table">
                     <tr>
                         <th>ORE</th>
-                        <th>FEMMINE</th>
-                        <th>MASCHI</th>
+                        <th>A-L</th>
+                        <th>M-Z</th>
                         <th>TOTALE</th>
-                        <th>% FEMMINE</th>
-                        <th>% MASCHI</th>
+                        <th>% A-L</th>
+                        <th>% M-Z</th>
                         <th>% TOTALE</th>
                     </tr>
                     <tr ng-repeat="x in data.dati | orderBy: customOrder track by $index">

@@ -131,7 +131,7 @@ angular.module('index', ['ui.bootstrap','chart.js'])
             for (var i = oraInizioLun; i <= oraFineLun; i++) {
                 $scope.glabels.push('ore ' + i);
             }
-            $scope.gseries = ['Maschi', 'Femmine', 'Totale'];
+            $scope.gseries = ['M_Z', 'A_L', 'Totale'];
             $scope.gdata = [[],[],[]];
             $scope.data.dati.forEach(function(x){
                 $scope.gdata[0].push((x.uomini === 0 && x.ora!==oraInizio) ? null : x.uomini);
